@@ -21,8 +21,8 @@ import tensorflow as tf
 
 from nets import inception
 
-#新分类600种
-CLASS_COUNT = 600
+#新分类200种
+CLASS_COUNT = 200
 
 class InceptionTest(tf.test.TestCase):
 
