@@ -51,7 +51,7 @@ def densenet(images, num_classes=1001, is_training=False,
     """
     growth = 12
     compression_rate = 0.5
-	filter = 64
+    filter=64
 
     def reduce_dim(input_feature):
         return int(int(input_feature.shape[-1]) * compression_rate)
