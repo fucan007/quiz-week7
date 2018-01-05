@@ -21,16 +21,13 @@ import tensorflow as tf
 
 from nets import inception
 
-#新分类200种
-CLASS_COUNT = 200
 
 class InceptionTest(tf.test.TestCase):
 
   def testBuildLogits(self):
     batch_size = 5
     height, width = 299, 299
-#    num_classes = 1000
-	num_classes = CLASS_COUNT
+    num_classes = 1000
     inputs = tf.random_uniform((batch_size, height, width, 3))
     logits, end_points = inception.inception_v4(inputs, num_classes)
     auxlogits = end_points['AuxLogits']
@@ -60,7 +57,7 @@ class InceptionTest(tf.test.TestCase):
   def testBuildWithoutAuxLogits(self):
     batch_size = 5
     height, width = 299, 299
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     inputs = tf.random_uniform((batch_size, height, width, 3))
     logits, endpoints = inception.inception_v4(inputs, num_classes,
                                                create_aux_logits=False)
@@ -72,7 +69,7 @@ class InceptionTest(tf.test.TestCase):
   def testAllEndPointsShapes(self):
     batch_size = 5
     height, width = 299, 299
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v4(inputs, num_classes)
     endpoints_shapes = {'Conv2d_1a_3x3': [batch_size, 149, 149, 32],
@@ -154,7 +151,7 @@ class InceptionTest(tf.test.TestCase):
   def testVariablesSetDevice(self):
     batch_size = 5
     height, width = 299, 299
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     inputs = tf.random_uniform((batch_size, height, width, 3))
     # Force all Variables to reside on the device.
     with tf.variable_scope('on_cpu'), tf.device('/cpu:0'):
@@ -169,7 +166,7 @@ class InceptionTest(tf.test.TestCase):
   def testHalfSizeImages(self):
     batch_size = 5
     height, width = 150, 150
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     inputs = tf.random_uniform((batch_size, height, width, 3))
     logits, end_points = inception.inception_v4(inputs, num_classes)
     self.assertTrue(logits.op.name.startswith('InceptionV4/Logits'))
@@ -182,7 +179,7 @@ class InceptionTest(tf.test.TestCase):
   def testGlobalPool(self):
     batch_size = 2
     height, width = 400, 600
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     inputs = tf.random_uniform((batch_size, height, width, 3))
     logits, end_points = inception.inception_v4(inputs, num_classes)
     self.assertTrue(logits.op.name.startswith('InceptionV4/Logits'))
@@ -195,7 +192,7 @@ class InceptionTest(tf.test.TestCase):
   def testGlobalPoolUnknownImageShape(self):
     batch_size = 2
     height, width = 400, 600
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     with self.test_session() as sess:
       inputs = tf.placeholder(tf.float32, (batch_size, None, None, 3))
       logits, end_points = inception.inception_v4(
@@ -214,7 +211,7 @@ class InceptionTest(tf.test.TestCase):
   def testUnknownBatchSize(self):
     batch_size = 1
     height, width = 299, 299
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     with self.test_session() as sess:
       inputs = tf.placeholder(tf.float32, (None, height, width, 3))
       logits, _ = inception.inception_v4(inputs, num_classes)
@@ -229,7 +226,7 @@ class InceptionTest(tf.test.TestCase):
   def testEvaluation(self):
     batch_size = 2
     height, width = 299, 299
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     with self.test_session() as sess:
       eval_inputs = tf.random_uniform((batch_size, height, width, 3))
       logits, _ = inception.inception_v4(eval_inputs,
@@ -244,7 +241,7 @@ class InceptionTest(tf.test.TestCase):
     train_batch_size = 5
     eval_batch_size = 2
     height, width = 150, 150
-    num_classes = CLASS_COUNT
+    num_classes = 1000
     with self.test_session() as sess:
       train_inputs = tf.random_uniform((train_batch_size, height, width, 3))
       inception.inception_v4(train_inputs, num_classes)

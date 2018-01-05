@@ -4,6 +4,8 @@ http://edu.csdn.net/lecturer/1427
 
 # TinymMind上GPU运行费用较贵，每 CPU 每小时 $0.09，每 GPU 每小时 $0.99，所有作业内容推荐先在本地运行出一定的结果，保证运行正确之后，再上传到TinyMind上运行。初始运行推荐使用CPU运行资源，待所有代码确保没有问题之后，再启动GPU运行。
 
+TinyMind上Tensorflow已经有1.4的版本，能比1.3的版本快一点，推荐使用。
+
 ## 作业1
 利用slim框架，做一个inceptionv4的迁移训练
 ### 数据集
@@ -52,7 +54,7 @@ https://www.tinymind.com/ai100/quiz-w7-1
 2017-12-1 23:03:04.327097: I tensorflow/core/kernels/logging_ops.cc:79] eval/Recall_5[0.494873047]
 ```
 
-经过10个以上epoch的训练（约4～6个小时）的训练，Top1（Accuracy）应不低于80%， Top5（Recall）应不低于90%。这两个指标将会作为作业及格的标准。
+经过5个以上epoch的训练（TinyMind上6个小时左右）的训练，Top1（Accuracy）应不低于60%， Top5（Recall）应不低于70%。这两个指标将会作为作业及格的标准。
 >这里使用的数据和模型及相关参数，已经过课程相关人员评估。
 >epoch计算方式：
 >epoch = step * batch_size / count_all_train_pics
