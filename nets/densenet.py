@@ -49,7 +49,7 @@ def densenet(images, num_classes=1001, is_training=False,
       end_points: a dictionary from components of the network to the corresponding
         activation.
     """
-    growth = 24
+    growth = 12
     compression_rate = 0.5
 
     def reduce_dim(input_feature):
@@ -60,10 +60,42 @@ def densenet(images, num_classes=1001, is_training=False,
     with tf.variable_scope(scope, 'DenseNet', [images, num_classes]):
         with slim.arg_scope(bn_drp_scope(is_training=is_training,
                                          keep_prob=dropout_keep_prob)) as ssc:
-            pass
+										 
+            #pass
             ##########################
             # Put your code here.
             ##########################
+			#前端7x7卷积+3x3池化
+            net = slim.conv2d(images, growth, [7,7], stride=2,scope=scope + '_7x7conv')
+            net = slim.max_pool2d(net, [3, 3], stride=2, padding='VALID',scope=scope + 'MaxPool_3x3')
+			#DenseBlock_1
+            net = block(net, 6, growth, scope='DenseBlock_1')
+            net = slim.conv2d(net, reduce_dim(net), [1,1], stride=1, scope='Trans_conv1')
+            net = slim.avg_pool2d(net, [2,2], stride=2, scope='Trans_avg1')
+			#DenseBlock_2
+            net = block(net, 12, growth, scope='DenseBlock_2')
+            net = slim.conv2d(net, reduce_dim(net), [1,1], stride=1, scope='Trans_conv2')
+            net = slim.avg_pool2d(net, [2,2], stride=2, scope='Trans_avg2')
+			
+			#DenseBlock_3
+            net = block(net, 24, growth, scope='DenseBlock_3')
+            net = slim.conv2d(net, reduce_dim(net), [1,1], stride=1, scope='Trans_conv3')
+            net = slim.avg_pool2d(net, [2,2], stride=2, scope='Trans_avg3')
+			
+			#DenseBlock_4
+            net = block(net, 16, growth, scope='DenseBlock_4')
+			
+			#全局平均池化
+            kernel_size = net.get_shape()[1:3]
+            net = slim.avg_pool2d(net, kernel_size, stride=1, scope='Global_avg3')
+            end_points['global_pool'] = net
+            net = slim.flatten(net, scope='PreLogitsFlatten')
+            end_points['PreLogitsFlatten'] = net
+          
+            logits = slim.fully_connected(net, num_classes, activation_fn=None,
+                                        scope='Logits')
+            end_points['Logits'] = logits
+            end_points['Predictions'] = tf.nn.softmax(logits, name='Predictions')
 
     return logits, end_points
 
