@@ -42,7 +42,7 @@ if __name__ == '__main__':
     os.chdir(w_d)
 
     step_per_epoch = 50000 // FLAGS.batch_size
-	print(FLAGS.checkpoint_path)
+    print(FLAGS.checkpoint_path)
     for i in range(60):
         steps = int(step_per_epoch * (i + 1))
         # train 1 epoch
